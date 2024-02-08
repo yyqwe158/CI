@@ -1,0 +1,13 @@
+diff --git a/kernel/KernelSU/kernel/ksu.c b/kernel/KernelSU/kernel/ksu.c
+index 28b8c00..61a4773 100644
+--- a/kernel/KernelSU/kernel/ksu.c
++++ b/kernel/KernelSU/kernel/ksu.c
+@@ -53,7 +53,7 @@ int __init kernelsu_init(void)
+ 
+ 	ksu_uid_observer_init();
+ 
+-#ifdef CONFIG_KPROBES
++#ifdef CONFIG_KPROBES_TEST
+ 	ksu_enable_sucompat();
+ 	ksu_enable_ksud();
+ #else

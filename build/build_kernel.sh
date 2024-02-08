@@ -23,6 +23,9 @@ KERNEL_DEVICE="Xiaomi Mix 2s"
 KERNEL_BOT=Baka-CI
 KERNEL_DATE="$(date +%Y%m%d-%H%M)"
 KERNEL_ANDROID_VER="Q"
+# KSU version v0.9.5
+# KSU_Next version v1.0.4
+KERNELSU_VERSION="next-susfs"
 
 # Telegram Bot
 TELEGRAM_BOT_ID=${TELEGRAM_BOT}
@@ -52,7 +55,13 @@ if [ "$BUILD_CLANG" = "1" ]; then
     export LD_LIBRARY_PATH="$(pwd)/proton-clang/bin/../lib:$PATH"
     #rm $CLANG_PATH/ld $CLANG_PATH/as
 elif [ "$BUILD_CLANG" = "2" ]; then
-    wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r510928.tar.gz -O google-clang.tar.gz
+    # Set the URL to the Android Clang/LLVM Prebuilts README
+    URL="https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+/master/README.md"
+    # Download the README file
+    README=$(curl -s $URL)
+    # Extract the version number
+    VERSION=$(echo "$README" | grep 'clang-r' | head -1 | grep -oE 'clang-r[0-9]+' | head -1)
+    wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/$VERSION.tar.gz -O google-clang.tar.gz
     mkdir google-clang && tar -xzvf google-clang.tar.gz -C google-clang > /dev/null
     export CLANG_PATH=$(pwd)/google-clang/bin
     export PATH=${CLANG_PATH}:${PATH}
@@ -103,7 +112,17 @@ elif [ "$BUILD_KERNEL" = "2" ]; then
     KERNEL_SCHED="EAS"
     git clone --depth=1 -b ${KERNEL_BRANCH} https://github.com/unknownbaka/utopia_kernel_polaris ${KERNEL}
     sed -i "/CONFIG_CC_WERROR/d" ${KERNEL}/arch/arm64/configs/polaris_defconfig
-    # cd ${KERNEL} && git submodule init && git submodule update && cd ..
+    #cd ${KERNEL} && git submodule update --init --remote && cd ..
+    #patch -p1 < build/ksu_test.patch
+    #cd ${KERNEL} && git submodule update --remote && cd KernelSU && git checkout v0.7.6 && cd ../..
+    cd ${KERNEL} && git submodule update --init --remote
+
+    # GitHub repository URL
+    #REPO_URL="https://github.com/tiann/KernelSU.git"
+    # Fetch the latest tag from the repository
+    #LATEST_TAG=$(git ls-remote --tags $REPO_URL | cut -d'/' -f3 | sort -V | tail -n1)
+    cd ${KERNEL}/KernelSU && git checkout $KERNELSU_VERSION
+    cd ../..
 fi
 
 # AnyKernel 3
@@ -245,6 +264,7 @@ sed -i "s/ExampleKernel/${KERNEL_NAME}Kernel/g" anykernel.sh
 sed -i "s/DeviceName/${KERNEL_DEVICE}/g" anykernel.sh
 sed -i "s/codename/${CODENAME}/g" anykernel.sh
 #sed -i "s/do.refresh_rate=/do.refresh_rate=67/g" anykernel.sh
+sed -i "s/do.battery_capacity=/do.battery_capacity=4000/g" anykernel.sh
 make -j$(nproc --all)
 mv Kernel.zip ${KERNEL_TEMP}/${KERNEL_NAME}-${CODENAME}-${KERNEL_DATE}.zip
 }

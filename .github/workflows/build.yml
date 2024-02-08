@@ -35,7 +35,7 @@ jobs:
           ReleaseName=`ls TEMP/*.zip | awk -F '(/|.zip)' '{print $2}'` && echo "ReleaseName=$ReleaseName" >> $GITHUB_OUTPUT
           unzip TEMP/*.zip -d Final
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         name: Upload
         with:
           name: ${{ steps.prepareArtifact.outputs.ReleaseName }}
