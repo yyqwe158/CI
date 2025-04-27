@@ -25,7 +25,7 @@ KERNEL_DATE="$(date +%Y%m%d-%H%M)"
 KERNEL_ANDROID_VER="Q"
 # KSU version v0.9.5
 # KSU_Next version v1.0.4
-KERNELSU_VERSION="next-susfs"
+KERNELSU_VERSION="susfs-dev"
 
 # Telegram Bot
 TELEGRAM_BOT_ID=${TELEGRAM_BOT}
@@ -122,6 +122,8 @@ elif [ "$BUILD_KERNEL" = "2" ]; then
     # Fetch the latest tag from the repository
     #LATEST_TAG=$(git ls-remote --tags $REPO_URL | cut -d'/' -f3 | sort -V | tail -n1)
     cd ${KERNEL}/KernelSU && git checkout $KERNELSU_VERSION
+    # 使用远程库的 main 分支来计算 ksu 版本
+    sed -i 's/main/origin\/main/g' kernel/Makefile
     cd ../..
 fi
 
@@ -252,7 +254,18 @@ END=$(date +"%s")
 DIFF=$(($END - $START))
 bot_complete_compile
 bot_build_success
-cp ${IMAGE} AnyKernel3
+
+wget https://github.com/ShirkNeko/SukiSU_KernelPatch_patch/releases/download/0.11-beta/patch_linux
+chmod +x patch_linux
+cp ${KERNEL}/out/arch/arm64/boot/Image .
+cp ${KERNEL}/out/arch/arm64/boot/dts/qcom/*.dtb .
+./patch_linux
+mv -f oImage Image
+gzip -k Image Image.gz
+cat Image.gz *.dtb > Image.gz-dtb
+cp Image.gz-dtb AnyKernel3
+
+#cp ${IMAGE} AnyKernel3
 anykernel
 kernel_upload
 }
