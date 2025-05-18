@@ -108,9 +108,9 @@ if [ "$BUILD_KERNEL" = "1" ]; then
     sed -i "/Werror/d" ${KERNEL}/drivers/staging/qcacld-3.0/Kbuild
 elif [ "$BUILD_KERNEL" = "2" ]; then
     KERNEL_NAME="Utopia"
-    KERNEL_BRANCH="staging"
+    KERNEL_BRANCH="A"
     KERNEL_SCHED="EAS"
-    git clone --depth=1 -b ${KERNEL_BRANCH} https://github.com/unknownbaka/utopia_kernel_polaris ${KERNEL}
+    git clone --depth=1 -b ${KERNEL_BRANCH} https://github.com/yyqwe158/utopia_kernel_polaris ${KERNEL}
     sed -i "/CONFIG_CC_WERROR/d" ${KERNEL}/arch/arm64/configs/polaris_defconfig
     #cd ${KERNEL} && git submodule update --init --remote && cd ..
     #patch -p1 < build/ksu_test.patch
