@@ -121,7 +121,7 @@ elif [ "$BUILD_KERNEL" = "2" ]; then
     #REPO_URL="https://github.com/tiann/KernelSU.git"
     # Fetch the latest tag from the repository
     #LATEST_TAG=$(git ls-remote --tags $REPO_URL | cut -d'/' -f3 | sort -V | tail -n1)
-    cd ${KERNEL}/KernelSU && git checkout $KERNELSU_VERSION
+    cd ${KERNEL}/KernelSU && git checkout 41b8f854a482a154b00a91726bcb4727a7a16ecc
     # 使用远程库的 main 分支来计算 ksu 版本
     sed -i 's/main/origin\/main/g' kernel/Makefile
     cd ../..
