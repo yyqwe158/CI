@@ -13,7 +13,7 @@ export TZ=CST-8
 
 # Kernel directory environment
 BUILD_GCC=0
-BUILD_CLANG=1
+BUILD_CLANG=2
 BUILD_KERNEL=2
 CODENAME="polaris"
 IMAGE="$(pwd)/kernel/out/arch/arm64/boot/Image.gz-dtb"
