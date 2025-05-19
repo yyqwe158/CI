@@ -25,7 +25,7 @@ KERNEL_DATE="$(date +%Y%m%d-%H%M)"
 KERNEL_ANDROID_VER="Q"
 # KSU version v0.9.5
 # KSU_Next version v1.0.4
-KERNELSU_VERSION="susfs-dev"
+KERNELSU_VERSION="susfs-stable"
 
 # Telegram Bot
 TELEGRAM_BOT_ID=${TELEGRAM_BOT}
@@ -121,7 +121,7 @@ elif [ "$BUILD_KERNEL" = "2" ]; then
     #REPO_URL="https://github.com/tiann/KernelSU.git"
     # Fetch the latest tag from the repository
     #LATEST_TAG=$(git ls-remote --tags $REPO_URL | cut -d'/' -f3 | sort -V | tail -n1)
-    cd ${KERNEL}/KernelSU && git checkout 41b8f854a482a154b00a91726bcb4727a7a16ecc
+    cd ${KERNEL}/KernelSU && git checkout $KERNELSU_VERSION
     # 使用远程库的 main 分支来计算 ksu 版本
     sed -i 's/main/origin\/main/g' kernel/Makefile
     cd ../..
