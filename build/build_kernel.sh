@@ -25,7 +25,7 @@ KERNEL_DATE="$(date +%Y%m%d-%H%M)"
 KERNEL_ANDROID_VER="Q"
 # KSU version v0.9.5
 # KSU_Next version v1.0.4
-KERNELSU_VERSION="susfs-stable"
+KERNELSU_VERSION="susfs-dev"
 
 # Telegram Bot
 TELEGRAM_BOT_ID=${TELEGRAM_BOT}
